@@ -105,7 +105,7 @@ resource "null_resource" "local_command" {
   }
    
    provisioner "local-exec" {
-    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitring-deployment.yml"
+    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring-deployment.yml"
   }
 
    provisioner "local-exec" {
@@ -137,7 +137,7 @@ resource "aws_instance" "monitoring_server" {
         command = " echo ${aws_instance.monitoring_server.public_ip} > inventory "
   }
    provisioner "local-exec" {
-  command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitring.yml "
+  command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring.yml "
   }
 depends_on = [null_resource.local_command]
 }
