@@ -16,7 +16,7 @@ spec:
         app: healthcare-app
     spec:
       containers:
-        - name: health-care-container
+        - name: healthcare-container
           image: anjalibhat/healthcare-app:latest
           ports:
-            - containerPort: 8083
+            - containerPort: 8082
