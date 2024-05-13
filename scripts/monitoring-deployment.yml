@@ -23,3 +23,6 @@
 
     - name: Expose cadvisor pod
       shell: kubectl expose pod {{ cadvisor_pod_name.stdout }} --type=NodePort --port=8080 --target-port=8080
+
+    - name: Create Prometheus service
+      shell: kubectl expose deployment prometheus --type=NodePort --port=9090 --target-port=9090
