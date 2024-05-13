@@ -90,22 +90,7 @@ resource "aws_instance" "kubernetes_worker_2" {
   } 
   depends_on = [aws_instance.kubernetes_worker_1]
 }
-resource "null_resource" "local_command" {
-  
-   provisioner "local-exec" {
-        command = " echo ${aws_instance.kubernetes_master.public_ip} > inventory "
-  }
-   
-   provisioner "local-exec" {
-    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring-deployment.yml"
-  }
 
-   provisioner "local-exec" {
-    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/k8sdeploy.yml"
-  }
-  depends_on = [aws_instance.kubernetes_worker_2]
-
-}
 resource "aws_instance" "monitoring_server" {
   ami = "ami-04b70fa74e45c3917" 
   instance_type = "t2.micro" 
@@ -129,5 +114,23 @@ resource "aws_instance" "monitoring_server" {
    provisioner "local-exec" {
    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring.yml"
   } 
-  depends_on = [null_resource.local_command]
+}
+resource "null_resource" "local_command" {
+  
+  provisioner "local-exec" {
+        command = " echo ${aws_instance.kubernetes_master.public_ip} > inventory "
+  }
+
+  provisioner "local-exec" {
+    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/k8sdeploy.yml"
+  }
+
+  provisioner "local-exec" {
+    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/prometheus_deploy.yml"
+  }
+
+  provisioner "local-exec" {
+    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring-deployment.yml"
+  }
+
 }
