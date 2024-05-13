@@ -53,3 +53,5 @@
         
     - name: Start Prometheus
       command: "./prometheus --config.file=prometheus.yml"
+      args:
+        chdir: "/opt/prometheus-2.51.2.linux-amd64/"
