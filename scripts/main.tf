@@ -1,15 +1,15 @@
-resource "tls_private_key" "finance-me-key" {
+resource "tls_private_key" "healthcare-key" {
   algorithm = "RSA"
 }
 
 resource "aws_key_pair" "app_key" {
-  key_name   = "finance-me-key"
-  public_key = tls_private_key.finance-me-key.public_key_openssh
+  key_name   = "healthcare-key"
+  public_key = tls_private_key.healthcare-key.public_key_openssh
 }
 
-resource "local_file" "finance-me-key" {
-  content  = tls_private_key.finance-me-key.private_key_pem
-  filename = "finance-me-key.pem"
+resource "local_file" "healthcare-key" {
+  content  = tls_private_key.healthcare-key.private_key_pem
+  filename = "healthcare-key.pem"
 
   provisioner "local-exec" {
     command = "chmod 600 ${self.filename}"
@@ -20,10 +20,10 @@ resource "local_file" "finance-me-key" {
 resource "aws_instance" "kubernetes_master" {
   ami             = "ami-04b70fa74e45c3917"
   instance_type   = "t2.micro"
-  key_name        = "finance-me-key"
+  key_name        = "healthcare-key"
   vpc_security_group_ids= ["sg-090308876f85665e4"]
   tags = {
-    Name = "Kubernetes-Master"
+    Name = "kubernetes-master"
   }
 
   provisioner "remote-exec" {
@@ -32,7 +32,7 @@ resource "aws_instance" "kubernetes_master" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.finance-me-key.private_key_pem
+    private_key = tls_private_key.healthcare-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
@@ -47,10 +47,10 @@ resource "aws_instance" "kubernetes_master" {
 resource "aws_instance" "kubernetes_worker_1" {
   ami             = "ami-04b70fa74e45c3917"
   instance_type   = "t2.micro"
-  key_name        = "finance-me-key"
+  key_name        = "healthcare-key"
   vpc_security_group_ids= ["sg-090308876f85665e4"]
   tags = {
-    Name = "Kubernetes-Worker-1"
+    Name = "kubernetes_worker_1"
   }
 
   provisioner "remote-exec" {
@@ -59,7 +59,7 @@ resource "aws_instance" "kubernetes_worker_1" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.finance-me-key.private_key_pem
+    private_key = tls_private_key.healthcare-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
@@ -74,10 +74,10 @@ resource "aws_instance" "kubernetes_worker_1" {
 resource "aws_instance" "kubernetes_worker_2" {
   ami             = "ami-04b70fa74e45c3917"
   instance_type   = "t2.micro"
-  key_name        = "finance-me-key"
+  key_name        = "healthcare-key"
   vpc_security_group_ids= ["sg-090308876f85665e4"]
   tags = {
-    Name = "Kubernetes-Worker-2"
+    Name = "kubernetes_worker_2"
   }
 
   provisioner "remote-exec" {
@@ -86,7 +86,7 @@ resource "aws_instance" "kubernetes_worker_2" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.finance-me-key.private_key_pem
+    private_key = tls_private_key.healthcare-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
@@ -118,10 +118,10 @@ resource "null_resource" "local_command" {
 resource "aws_instance" "monitoring_server" {
   ami             = "ami-04b70fa74e45c3917"
   instance_type   = "t2.micro"
-  key_name        = "finance-me-key"
+  key_name        = "healthcare-key"
   vpc_security_group_ids= ["sg-090308876f85665e4"]
   tags = {
-    Name = "Monitoring-Server"
+    Name = "monitoring_server"
   }
 
   provisioner "remote-exec" {
@@ -130,7 +130,7 @@ resource "aws_instance" "monitoring_server" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.finance-me-key.private_key_pem
+    private_key = tls_private_key.healthcare-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
