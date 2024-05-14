@@ -41,6 +41,9 @@ resource "aws_instance" "kubernetes_master" {
    provisioner "local-exec" {
   	command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/k8s-master-setup.yml"
   }
+   provisioner "local-exec" {
+    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring.yml "
+  }
   
 }
 
@@ -113,32 +116,4 @@ resource "null_resource" "local_command" {
   }
   depends_on = [aws_instance.kubernetes_worker_2]
 
-}
-
-resource "aws_instance" "monitoring_server" {
-  ami             = "ami-04b70fa74e45c3917"
-  instance_type   = "t2.micro"
-  key_name        = "new-key"
-  vpc_security_group_ids= ["sg-090308876f85665e4"]
-  tags = {
-    Name = "monitoring_server"
-  }
-
-  provisioner "remote-exec" {
-      inline = [ "echo 'wait to start instance' "]
-  }
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = tls_private_key.new-key.private_key_pem
-    host        = self.public_ip
-  }
-   provisioner "local-exec" {
-        command = " echo ${aws_instance.monitoring_server.public_ip} > inventory "
-  }
-   provisioner "local-exec" {
-  command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/monitoring.yml "
-  }
-depends_on = [null_resource.local_command]
-   
 }
