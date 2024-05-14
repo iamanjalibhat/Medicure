@@ -5,7 +5,7 @@
   tasks:
     - name: Copy deployment YAML file to root user's home directory on remote machine
       copy:
-        src:  deployment.yml
+        src:  kubernetes.yml
         dest: /root/kubernetes.yml
 
     - name: Apply kubernetes deployment and YAML with kubectl
