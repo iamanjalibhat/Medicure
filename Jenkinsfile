@@ -13,13 +13,13 @@ pipeline {
             steps {
                 git 'https://github.com/iamanjalibhat/Medicure.git'
             }
-        }
+		}
         stage('Maven Build') {
             steps {
                 // Run Maven on a Unix agent.
                 sh "mvn -Dmaven.test.failure.ignore=true clean package"
             }
-	}
+		}
         stage("Docker build"){
             steps {
 		sh 'docker version'
@@ -38,5 +38,16 @@ pipeline {
 		sh "docker push anjalibhat/medicure-app:latest"
 	     }
 	}
+	stage('Create Infrastructure using terraform') {
+	     steps {
+		dir('scripts') {
+			withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'JenkinsIAMuser', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+			sh 'terraform init'
+			sh 'terraform validate'
+			sh 'terraform apply --auto-approve -lock=false'
+			}
+                }
+	     }
+       }
     }
 }
