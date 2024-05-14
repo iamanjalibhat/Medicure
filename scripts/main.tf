@@ -1,15 +1,15 @@
-resource "tls_private_key" "medicure-key" {
+resource "tls_private_key" "capstone-key" {
   algorithm = "RSA"
 }
 
 resource "aws_key_pair" "app-key" {
-  key_name   = "medicure-key"
-  public_key = tls_private_key.medicure-key.public_key_openssh
+  key_name   = "capstone-key"
+  public_key = tls_private_key.capstone-key.public_key_openssh
 }
 
-resource "local_file" "medicure-key" {
-  content  = tls_private_key.medicure-key.private_key_pem
-  filename = "medicure-key.pem"
+resource "local_file" "capstone-key" {
+  content  = tls_private_key.capstone-key.private_key_pem
+  filename = "capstone-key.pem"
 
   provisioner "local-exec" {
     command = "chmod 600 ${self.filename}"
@@ -18,10 +18,10 @@ resource "local_file" "medicure-key" {
 }
 
 resource "aws_instance" "kubernetes_master" {
-  ami             = "ami-04b70fa74e45c3917"
+  ami             = "ami-0e001c9271cf7f3b9"
   instance_type   = "t2.micro"
-  key_name        = "medicure-key"
-  vpc_security_group_ids= ["sg-090308876f85665e4"]
+  key_name        = "capstone-key"
+  vpc_security_group_ids= ["sg-011b20abb569c9149"]
   tags = {
     Name = "kubernetes_master"
   }
@@ -32,7 +32,7 @@ resource "aws_instance" "kubernetes_master" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.medicure-key.private_key_pem
+    private_key = tls_private_key.capstone-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
@@ -48,10 +48,10 @@ resource "aws_instance" "kubernetes_master" {
 }
 
 resource "aws_instance" "kubernetes_worker1" {
-  ami             = "ami-04b70fa74e45c3917"
+  ami             = "ami-0e001c9271cf7f3b9"
   instance_type   = "t2.micro"
-  key_name        = "medicure-key"
-  vpc_security_group_ids= ["sg-090308876f85665e4"]
+  key_name        = "capstone-key"
+  vpc_security_group_ids= ["sg-011b20abb569c9149"]
   tags = {
     Name = "kubernetes_worker1"
   }
@@ -62,7 +62,7 @@ resource "aws_instance" "kubernetes_worker1" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.medicure-key.private_key_pem
+    private_key = tls_private_key.capstone-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
@@ -75,10 +75,10 @@ resource "aws_instance" "kubernetes_worker1" {
 }
 
 resource "aws_instance" "kubernetes_worker2" {
-  ami             = "ami-04b70fa74e45c3917"
+  ami             = "ami-0e001c9271cf7f3b9"
   instance_type   = "t2.micro"
-  key_name        = "medicure-key"
-  vpc_security_group_ids= ["sg-090308876f85665e4"]
+  key_name        = "capstone-key"
+  vpc_security_group_ids= ["sg-011b20abb569c9149"]
   tags = {
     Name = "kubernetes_worker2"
   }
@@ -89,7 +89,7 @@ resource "aws_instance" "kubernetes_worker2" {
   connection {
     type        = "ssh"
     user        = "ubuntu"
-    private_key = tls_private_key.medicure-key.private_key_pem
+    private_key = tls_private_key.capstone-key.private_key_pem
     host        = self.public_ip
   }
    provisioner "local-exec" {
