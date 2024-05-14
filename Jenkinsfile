@@ -23,9 +23,9 @@ pipeline {
         stage("Docker build"){
             steps {
 		sh 'docker version'
-		sh "docker build -t anjalibhat/healthcare-app:${BUILD_NUMBER} ."
+		sh "docker build -t anjalibhat/medicure-app:${BUILD_NUMBER} ."
 		sh 'docker image list'
-		sh "docker tag anjalibhat/healthcare-app:${BUILD_NUMBER} anjalibhat/healthcare-app:latest"
+		sh "docker tag anjalibhat/medicure-app:${BUILD_NUMBER} anjalibhat/medicure-app:latest"
             }
         } 
 	stage('Login to DockerHub') {
@@ -35,7 +35,7 @@ pipeline {
 	}
 	stage('Push to DockerHub') {
              steps {
-		sh "docker push anjalibhat/healthcare-app:latest"
+		sh "docker push anjalibhat/medicure-app:latest"
 	     }
 	}
 	stage('Create Infrastructure using terraform') {
