@@ -2,22 +2,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: healthcare-deploy
+  name: medicure-deploy
   labels:
-    app: healthcare-app
+    app: medicure-app
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: healthcare-app
+      app: medicure-app
   template:
     metadata:
       labels:
-        app: healthcare-app
+        app: medicure-app
     spec:
       containers:
-        - name: healthcare-container
-          image: anjalibhat/healthcare-app:latest
+        - name: medicure-container
+          image: anjalibhat/medicure-app:latest
           ports:
             - containerPort: 8082
 
@@ -25,12 +25,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: healthcare-service
+  name: medicure-service
   labels:
-    app: healthcare-app
+    app: medicure-app
 spec:
   selector:
-    app: healthcare-app
+    app: medicure-app
   type: NodePort
   ports:
     - nodePort: 31032
