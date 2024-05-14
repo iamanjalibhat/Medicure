@@ -112,7 +112,7 @@ resource "null_resource" "local_command" {
   }
 
    provisioner "local-exec" {
-    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/deployservice.yml"
+    command = "ansible-playbook /var/lib/jenkins/workspace/Healthcare/scripts/k8sdeploy.yml"
   }
   depends_on = [aws_instance.kubernetes_worker_2]
 
